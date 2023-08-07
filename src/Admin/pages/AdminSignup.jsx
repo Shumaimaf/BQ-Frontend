@@ -26,7 +26,6 @@ export default function AdminSignup() {
         console.log(payload)
         axios.post('http://localhost:3000/api/signup', payload)
             .then(json => {
-                console.log(json.data);
                 Cookies.set('token', json.data.token);
                 setLoading(false); 
             })

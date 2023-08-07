@@ -25,7 +25,6 @@ export default function AdminLogin() {
         console.log(payload);
         axios.post('http://localhost:3000/api/login', payload)
             .then(json => {
-                console.log(json.data);
                 Cookies.set('token', json.data.token);
                 setLoading(false); // Move setLoading(false) inside the .then block
                 setLoggedInemail(email); // Set the logged-in email here

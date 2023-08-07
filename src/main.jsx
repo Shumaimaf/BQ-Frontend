@@ -4,7 +4,8 @@ import App from './App.jsx';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CartContextProvider from './Users/context/addtoCart/context.jsx';
-import GlobalContextProvider from './Context/context.jsx';
+import GlobalContextProvider from './Guest/context/context.jsx';
+import Button from 'react-bootstrap/Button';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -1,77 +1,73 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-import { storage } from '../utils/FirebaseConfig'
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../utils/FirebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { GrUpdate } from 'react-icons/gr';
 
-export default function AdminAddBrands() {
+export default function AdminUpdate() {
     const [show, setShow] = useState(false);
     const [brandname, setBrandname] = useState("");
-    const [brandImage, setBrandImage] = useState("");
+    const [ID, setID] = useState("");
+    const [brandImage, setBrandImage] = useState(null);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const addBrand = (e) => {
+    const updateBrand = (e) => {
         e.preventDefault();
 
         const storageRef = ref(storage, `images/brands/${brandImage.name}`);
         uploadBytes(storageRef, brandImage).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
-                const payload = { BrandName: brandname, BrandImage: url };
+                const payload = { ID, BrandName: brandname, BrandImage: url }; // Include ID for updating
 
-                axios.post('http://localhost:3000/api/addbrand', payload) // Change axios.get to axios.post
+                // Assuming you have an API endpoint for updating brands
+                axios.put('http://localhost:3000/api/update-brand', payload)
                     .then(json => {
-                        // console.log(json.data);
+                        console.log(json.data);
                         setShow(false);
                     })
                     .catch(err => console.log(err));
-            })
-                .catch((error) => {
-                    // Handle any errors
-                });
+            });
         });
-
-
-
     };
 
     return (
         <>
-            <button className='bg-white rounded nav-item d-flex btn bg-white text-primary ms-2' onClick={handleShow}>Add Brand</button>
+            <button className='bg-white rounded nav-item d-flex btn bg-white text-primary m-5' onClick={handleShow}><GrUpdate /></button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Brand</Modal.Title>
+                    <Modal.Title>Update Brand</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form onSubmit={addBrand}>
+                    <form onSubmit={updateBrand}>
                         <div className='mb-3'>
-                            <label htmlFor='inputEmail' className='form-label'>
+                            <label htmlFor='inputID' className='form-label'>
+                                ID
+                            </label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='inputID'
+                                aria-describedby='brandnameHelp'
+                                value={ID}
+                                onChange={(e) => setID(e.target.value)}
+                            />
+                        </div>
+                        <div className='mb-3'>
+                            <label htmlFor='inputBrandName' className='form-label'>
                                 Brand Name
                             </label>
                             <input
-                                type='text' // Change type to 'text'
+                                type='text'
                                 className='form-control'
-                                id='inputEmail'
+                                id='inputBrandName'
                                 aria-describedby='brandnameHelp'
                                 value={brandname}
                                 onChange={(e) => setBrandname(e.target.value)}
                             />
                         </div>
-                        {/* <div className='mb-3'>
-                            <label htmlFor='brandImageInput'>Brand Image</label>
-                            <input
-                                type='text' // Change type to 'text' or 'file' as needed
-                                className='form-control'
-                                id='brandImageInput'
-                                aria-describedby='brandnameHelp'
-                                value={brandImage}
-                                onChange={(e) => setBrandImage(e.target.value)}
-                            />
-                        </div> */}
-
-
                         <div className="mb-3">
                             <label htmlFor="formFile" className="form-label">
                                 Brand Image
@@ -79,7 +75,7 @@ export default function AdminAddBrands() {
                             <input className="form-control" onChange={(e) => setBrandImage(e.target.files[0])} type="file" id="formFile" />
                         </div>
                         <button type='submit' className='btn btn-primary'>
-                            Add Brand
+                            Update Brand
                         </button>
                     </form>
                 </Modal.Body>
