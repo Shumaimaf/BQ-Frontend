@@ -15,7 +15,71 @@ export default function Signup() {
 
   // const navigate = useNavigate();
 
+  const saveUserDataToLocalStorage = (username, isLoggedIn) => {
+    localStorage.setItem('username', username);
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+    localStorage.setItem('confirm Password', confirmPassword);
+    localStorage.setItem('loggedIn', isLoggedIn.toString());
+  };
+
   const handleSubmit = (e) => {
+
+e.preventDefault();
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Password:', password);
+
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrorMessage('');
+
+    Swal.fire({
+      title: 'Login Successful!',
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    }).then(() => {
+      saveUserDataToLocalStorage(username, true);
+      setUser(true)
+      navigate('/');
+    });
+  };
+
+  const handleSignupSubmit = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords don't match");
+      return;
+    }
+
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
+
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrorMessage('');
+
+    Swal.fire('Success', 'Sign up successful!', 'success').then(() => {
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+
+      saveUserDataToLocalStorage(username, true);
+      setUser(true)
+
+      navigate('/');
+    });
+  };
+
+
+    
     e.preventDefault();
     const payload = { email, password, username }
     console.log(payload)
