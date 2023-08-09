@@ -1,1 +1,33 @@
 
+import React, { createContext, useEffect, useReducer } from 'react'
+import { reducer } from './reducer'
+
+const getUserData = () => {
+    let UserData = localStorage.getItem('CurrentUser');
+    if (UserData == "null") {
+      return null;
+    } else {
+      return JSON.parse(UserData);
+    }
+  };
+  
+
+const initialData = {
+    User: getUserData()
+}
+
+export const UserContext = createContext("Initial Value")
+
+export default function UserContextProvider({ children }) {
+    const [state, dispatch] = useReducer(reducer, initialData)
+
+    useEffect(() => {
+        localStorage.setItem('CurrentUser', JSON.stringify(state.User))
+    }, [state.User])
+
+    return (
+        <UserContext.Provider value={{ state, dispatch }}>
+            {children}
+        </UserContext.Provider>
+    )
+}
