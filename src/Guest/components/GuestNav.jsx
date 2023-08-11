@@ -5,8 +5,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { DiAtom } from 'react-icons/di';
 import { Button } from 'react-bootstrap';
-import Login from '../../Users/pages/Login';
-import Signup from '../../Users/pages/Signup';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 

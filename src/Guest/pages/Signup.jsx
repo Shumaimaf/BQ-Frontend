@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
-export default function Signup() {
+export default function Signup({ setUser }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -15,42 +15,61 @@ export default function Signup() {
 
   // const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const payload = { email, password, username }
-    console.log(payload)
-    axios.post('http://localhost:3000/api/signup', payload)
-      .then(json => console.log(json.data))
-      .catch(err => console.log(err))
-
-    if (password !== confirmPassword) {
-      Swal.fire('Error', 'Passwords do not match', 'error');
-      return;
-    }
-
-    setLoading(true);
-    setTimeout(() => {
-      console.log('Username:', username);
-      console.log('Password:', password);
-      console.log('Confirm Password:', confirmPassword);
-
-      setLoading(false);
-
-      Swal.fire('Success', 'Sign up completed!', 'success').then(() => {
-        setUsername('');
-        setPassword('');
-        setConfirmPassword('');
-
-
-
-        // localStorage.setItem('username', username); 
-        // localStorage.setItem('loggedIn', 'true'); 
-
-        // navigate('/');
-      });
-    }, 2000);
+  const saveUserDataToLocalStorage = (username, isLoggedIn) => {
+    localStorage.setItem('username', username);
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+    localStorage.setItem('confirm Password', confirmPassword);
+    localStorage.setItem('loggedIn', isLoggedIn.toString());
   };
 
+  const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   e.preventDefault();
+  //   console.log('Username:', username);
+  //   console.log('Email:', email);
+  //   console.log('Password:', password);
+
+  //   setUsername('');
+  //   setEmail('');
+  //   setPassword('');
+  //   setConfirmPassword('');
+  //   setErrorMessage('');
+
+  //   Swal.fire({
+  //     title: 'Login Successful!',
+  //     icon: 'success',
+  //     timer: 1500,
+  //     showConfirmButton: false
+  //   }).then(() => {
+  //     saveUserDataToLocalStorage(username, true);
+  //     setUser(true)
+  //     navigate('/');
+  //   });
+  // };
+
+
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
+
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+
+    Swal.fire('Success', 'Sign up successful!', 'success').then(() => {
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+
+      saveUserDataToLocalStorage(username, true);
+      setUser(true)
+
+      navigate('/');
+    });
+  };
   return (
     <div className="container d-flex flex-column align-items-center">
       <h1 className="fs-2 text-center mb-1 align-items-center fw-semibold" style={{ fontFamily: "'Playfair'" }}>Sign Up</h1>
@@ -106,12 +125,6 @@ export default function Signup() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        {/* <Form.Select style={{ fontFamily: "'Cinzel', serif" }} aria-label="Default select example" onChange={(e) => setGender(e.target.value)}>
-          <option style={{ fontFamily: "'Cinzel', serif" }}>Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </Form.Select> */}
-
         <Button style={{ fontFamily: "'Cinzel', serif" }} type="submit" className="btn btn-primary fs-5 my-3" disabled={loading}>
           {loading ? (
             <>

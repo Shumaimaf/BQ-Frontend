@@ -6,13 +6,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { DiAtom } from 'react-icons/di';
 import './Navbar.css';
-import Cart from './Cart';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RiAccountPinCircleLine } from 'react-icons/ri';
+import Cart from './Cart';;
+import { useContext } from 'react';
+import { GlobalContext } from '../../Context/context'
+import Cookies from 'js-cookie';
 
 function NavScrollExample() {
+
+  const { state, dispatch } = useContext(GlobalContext)
+
   return (
     <Navbar expand="lg" className="navbar bg-black">
       <Container fluid>
@@ -31,27 +33,20 @@ function NavScrollExample() {
             <Link className="icon-link icon-2" to="/products">
               <span className="link-text">Products</span>
             </Link>
-            <div className='mx-1'>
-            <DropdownButton
-              as={ButtonGroup}
-              id="account-dropdown"
-              variant="black"
-              title={<RiAccountPinCircleLine />}
-              className="custom-dropdown link-text"
-            >
-              <Dropdown.Item eventKey="1">
-                <Link className="dropdown-link" to="/login">
-                  <span className="link-text" style={{ fontFamily: "'Cinzel', serif" }}>Login</span>
-                </Link>
-              </Dropdown.Item>
-              <Dropdown.Item eventKey="2">
-                <Link className="dropdown-link" to="/signup">
-                  <span className="link-text" style={{ fontFamily: "'Cinzel', serif" }}>Sign Up</span>
-                </Link>
-              </Dropdown.Item>
-            </DropdownButton>
-            <Cart />
+            <Link className="btn text-white d-flex align-items-center">
+              <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" style={{ height: '3vh', objectFit: 'contain' }} alt="" />
+              profile
+            </Link>
+            <div className="d-flex">
+
+              <button className="btn btn-dark"
+                onClick={() => {
+                  Cookies.remove('token')
+                  dispatch({ type: "USER_LOGOUT" })
+                }}
+              >Sign Out</button>
             </div>
+            <Cart />
           </Nav>
         </Navbar.Collapse>
       </Container>

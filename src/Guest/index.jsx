@@ -1,32 +1,37 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, { useState } from 'react'; // Added { useState }
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import Signin from './pages/Signup'; // Import Signin component
+import Page404 from '../Users/pages/Page404';
 import CategoriesSection from '../Users/pages/CategoriesSection';
 import ProductCategoryPage from '../Users/pages/ProductCategorypage';
 import Products from '../Users/pages/Products';
-import Signup from '../Users/pages/Signup';
-import Login from '../Users/pages/Login';
 import ProductPage from '../Users/pages/ProductPage';
-import GuestNav from './components/GuestNav'
-import Footersection from '../Users/components/Footersection'
-import Home from './pages/Home';
+import GuestNav from './components/GuestNav';
+import Login from './pages/Login';
 
+export default function Users() {
+  const [user, setUser] = useState(false);
 
-export default function index() {
   return (
     <>
-      <div>
-        <GuestNav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products/categories" element={<CategoriesSection />} />
-          <Route path="/products/categories/:categoryName" element={< ProductCategoryPage />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:productID" element={<ProductPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-        <Footersection />
-      </div>
+      <GuestNav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin setUser={setUser} />} /> {/* Changed to Signin */}
+        {user ? (
+          <>
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:productID" element={<ProductPage />} />
+            <Route path="/products/category/:categoryName" element={<CategoriesSection />} />
+            <Route path="/products/category/:categoryName" element={<ProductCategoryPage />} /> {/* Changed to ProductCategoryPage */}
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/signin" replace={true} />} />
+        )}
+        <Route path="/*" element={<Page404 />} /> {/* Changed to "/*" */}
+      </Routes>
     </>
-  )
+  );
 }

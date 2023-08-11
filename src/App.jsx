@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { BrowserRouter, BrowserRouter as Router } from 'react-router-dom';
+import React from 'react';
+import { decodeToken } from 'react-jwt';
+import { Route, Routes } from 'react-router-dom';
+import { useContext } from 'react';
 import Admin from './Admin';
 import Guest from './Guest';
 import Users from './Users';
@@ -11,31 +13,23 @@ const componentsByRoles = {
   'guest': Guest
 };
 
-const getUserRole = (role) => componentsByRoles[role] || componentsByRoles['guest'];
+const getUserRole = (params) => componentsByRoles[params] || componentsByRoles['guest'];
+
 
 export default function App() {
-  const [state, dispatch] = useContext(GlobalContext) 
-  const [role, setRole] = useState('guest');
+  const { state, dispatch } = useContext(GlobalContext)
 
   const decodeUser = (token) => {
     if (!token) {
-      return undefined
-    }
-    else {
-      const res = decodeToken(token)
-      return res?.role
+      return undefined;
+    } else {
+      const res = decodeToken(token);
+      return res?.role;
     }
   }
 
-  const currentToken = decodeUser(state.token)
-  const CurrentUser = getUserRole(currentToken);
-
-
-  return (
-    <BrowserRouter>
-      <div>
-        <CurrentUser/>
-      </div>
-    </BrowserRouter>
-  );
+  const CurrentToken = decodeUser(state.token);
+  const CurrentUser = getUserRole(CurrentToken);
+  return <CurrentUser />
 }
+
