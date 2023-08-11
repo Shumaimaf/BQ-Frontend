@@ -21,6 +21,101 @@ export default function Signup({ setUser }) {
     localStorage.setItem('password', password);
     localStorage.setItem('confirm Password', confirmPassword);
     localStorage.setItem('loggedIn', isLoggedIn.toString());
+<<<<<<< HEAD:src/Guest/pages/Signup.jsx
+=======
+  };
+
+  const handleSubmit = (e) => {
+
+e.preventDefault();
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Password:', password);
+
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrorMessage('');
+
+    Swal.fire({
+      title: 'Login Successful!',
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    }).then(() => {
+      saveUserDataToLocalStorage(username, true);
+      setUser(true)
+      navigate('/');
+    });
+  };
+
+  const handleSignupSubmit = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords don't match");
+      return;
+    }
+
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
+
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrorMessage('');
+
+    Swal.fire('Success', 'Sign up successful!', 'success').then(() => {
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+
+      saveUserDataToLocalStorage(username, true);
+      setUser(true)
+
+      navigate('/');
+    });
+  };
+
+
+    
+    e.preventDefault();
+    const payload = { email, password, username }
+    console.log(payload)
+    axios.post('http://localhost:3000/api/signup', payload)
+      .then(json => console.log(json.data))
+      .catch(err => console.log(err))
+
+    if (password !== confirmPassword) {
+      Swal.fire('Error', 'Passwords do not match', 'error');
+      return;
+    }
+
+    setLoading(true);
+    setTimeout(() => {
+      console.log('Username:', username);
+      console.log('Password:', password);
+      console.log('Confirm Password:', confirmPassword);
+
+      setLoading(false);
+
+      Swal.fire('Success', 'Sign up completed!', 'success').then(() => {
+        setUsername('');
+        setPassword('');
+        setConfirmPassword('');
+
+
+
+        // localStorage.setItem('username', username); 
+        // localStorage.setItem('loggedIn', 'true'); 
+
+        // navigate('/');
+      });
+    }, 2000);
+>>>>>>> e6d6f6c030395ae610c1c0528e1cd9474ff76ca0:src/Users/pages/Signup.jsx
   };
 
   const handleSubmit = (e) => {
